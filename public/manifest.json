@@ -1,0 +1,22 @@
+{
+  "name": "LukGood - Find Beauticians Near You",
+  "short_name": "LukGood",
+  "description": "Discover and try on nails, makeup, and wigs from beauticians in your area",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ec4899",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
