@@ -21,7 +21,7 @@ const services: {
 
 export function ServiceFilter({ selected, onChange }: ServiceFilterProps) {
   return (
-    <div className="flex gap-1.5 overflow-x-auto hide-scrollbar p-1 bg-zinc-100/80 rounded-2xl backdrop-blur-sm">
+    <div className="inline-flex gap-1.5 overflow-x-auto hide-scrollbar p-1 bg-zinc-100/80 rounded-2xl backdrop-blur-sm">
       {services.map((service) => {
         const isSelected = selected === service.value;
         return (

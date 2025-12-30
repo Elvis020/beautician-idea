@@ -3,19 +3,17 @@
 import { useState, useMemo, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Search, MapPin, SlidersHorizontal, Sparkles, ArrowLeft, Grid3X3, LayoutList } from "lucide-react";
+import { Search, MapPin, Sparkles, ArrowLeft, Grid3X3, LayoutList } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BeauticianCard } from "@/components/beautician-card";
 import { ServiceFilter } from "@/components/service-filter";
-import { OccasionFilter } from "@/components/occasion-filter";
 import {
   filterBeauticians,
   calculateDistance,
   DEFAULT_LOCATION,
-  getInventoryByFilters,
 } from "@/lib/mock-data";
-import { ServiceType, OccasionType } from "@/types";
+import { ServiceType } from "@/types";
 
 function ExploreContent() {
   const searchParams = useSearchParams();
@@ -23,8 +21,6 @@ function ExploreContent() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedService, setSelectedService] = useState<ServiceType | null>(initialService);
-  const [selectedOccasion, setSelectedOccasion] = useState<OccasionType | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // Update service when URL changes
@@ -37,20 +33,10 @@ function ExploreContent() {
 
   // Filter beauticians based on selected filters
   const filteredBeauticians = useMemo(() => {
-    let results = filterBeauticians({
+    const results = filterBeauticians({
       service: selectedService || undefined,
       searchQuery: searchQuery || undefined,
     });
-
-    // If occasion is selected, filter by beauticians who have items for that occasion
-    if (selectedOccasion) {
-      const beauticianIdsWithOccasion = new Set(
-        getInventoryByFilters({ occasion: selectedOccasion }).map(
-          (item) => item.beautician_id
-        )
-      );
-      results = results.filter((b) => beauticianIdsWithOccasion.has(b.id));
-    }
 
     // Add distance calculation
     return results.map((b) => ({
@@ -62,7 +48,7 @@ function ExploreContent() {
         b.location.lng
       ),
     }));
-  }, [searchQuery, selectedService, selectedOccasion]);
+  }, [searchQuery, selectedService]);
 
   // Sort by distance
   const sortedBeauticians = useMemo(() => {
@@ -87,7 +73,7 @@ function ExploreContent() {
             </div>
             <div className="flex items-center gap-3">
               {/* View Toggle - Desktop only */}
-              <div className="hidden md:flex items-center gap-1 bg-zinc-100 rounded-lg p-1">
+              <div className="hidden lg:flex items-center gap-1 bg-zinc-100 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode("grid")}
                   className={`p-1.5 rounded-md transition-colors ${
@@ -120,25 +106,14 @@ function ExploreContent() {
               placeholder="Search beauticians..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-10"
+              className="pl-10"
             />
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className={`absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg transition-colors ${
-                showFilters ? "bg-pink-100 text-pink-600" : "text-zinc-400 hover:text-zinc-600"
-              }`}
-            >
-              <SlidersHorizontal className="h-4 w-4" />
-            </button>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="container-app pb-3 space-y-3">
+        <div className="container-app pb-3">
           <ServiceFilter selected={selectedService} onChange={setSelectedService} />
-          {showFilters && (
-            <OccasionFilter selected={selectedOccasion} onChange={setSelectedOccasion} />
-          )}
         </div>
       </header>
 
@@ -149,7 +124,6 @@ function ExploreContent() {
           <p className="text-sm text-zinc-500">
             {sortedBeauticians.length} beautician{sortedBeauticians.length !== 1 ? "s" : ""} found
             {selectedService && ` for ${selectedService}`}
-            {selectedOccasion && ` • ${selectedOccasion}`}
           </p>
         </div>
 
@@ -158,7 +132,7 @@ function ExploreContent() {
           <div className={`grid gap-4 lg:gap-6 stagger-children ${
             viewMode === "grid"
               ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-              : "grid-cols-1 max-w-3xl"
+              : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 max-w-5xl"
           }`}>
             {sortedBeauticians.map((beautician) => (
               <BeauticianCard
@@ -183,7 +157,6 @@ function ExploreContent() {
               onClick={() => {
                 setSearchQuery("");
                 setSelectedService(null);
-                setSelectedOccasion(null);
               }}
             >
               Clear Filters

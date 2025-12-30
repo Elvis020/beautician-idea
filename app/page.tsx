@@ -1,205 +1,142 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Sparkles, MapPin, ArrowRight, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Sparkles, ArrowRight, MapPin } from "lucide-react";
+import { TryOnSection } from "@/components/try-on/try-on-section";
+import { mockBeauticians } from "@/lib/mock-data";
+import Image from "next/image";
 
 export default function Home() {
-  const [isAnimated, setIsAnimated] = useState(false);
-
-  useEffect(() => {
-    setIsAnimated(true);
-  }, []);
+  // Get top beauticians for the popular section
+  const popularBeauticians = mockBeauticians
+    .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+    .slice(0, 4);
 
   return (
-    <div className="flex min-h-dvh bg-white">
-      {/* Left Side - Content */}
-      <div className="flex-1 flex flex-col bg-gradient-to-br from-pink-600 via-pink-500 to-rose-500 text-white lg:max-w-[55%] relative overflow-hidden">
-        {/* Decorative Elements - Mobile */}
-        <div className="absolute inset-0 opacity-10 lg:hidden">
-          <div className="absolute top-20 left-10 text-7xl">💅</div>
-          <div className="absolute top-40 right-8 text-6xl">💄</div>
-          <div className="absolute bottom-32 left-16 text-5xl">💇‍♀️</div>
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 flex flex-col min-h-dvh">
-          {/* Header */}
-          <header className="flex items-center justify-between px-6 pt-8 pb-4 lg:pt-10 lg:px-12">
-            <div
-              className={`flex items-center gap-2.5 transition-all duration-700 ${
-                isAnimated ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-              }`}
-            >
-              <div className="bg-white rounded-xl p-2 shadow-lg shadow-pink-700/20">
-                <Sparkles className="h-5 w-5 lg:h-6 lg:w-6 text-pink-600" />
-              </div>
-              <span className="text-xl lg:text-2xl font-bold tracking-tight">LukGood</span>
+    <div className="min-h-dvh bg-zinc-50">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-zinc-100">
+        <div className="container-app py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="bg-gradient-to-br from-pink-500 to-rose-500 rounded-xl p-1.5">
+              <Sparkles className="h-5 w-5 text-white" />
             </div>
-          </header>
-
-          {/* Main Content */}
-          <main className="flex-1 flex flex-col items-center lg:items-start justify-center px-6 lg:px-12 text-center lg:text-left pb-8">
-            <div
-              className={`transition-all duration-700 delay-200 max-w-lg ${
-                isAnimated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-            >
-              {/* Tagline */}
-              <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold mb-5 leading-[1.1] tracking-tight">
-                Find Your Perfect
-                <br />
-                <span className="text-pink-200">Look Nearby</span>
-              </h1>
-
-              <p className="text-pink-100 text-lg lg:text-xl mb-10 max-w-md">
-                Discover talented beauticians in your area for nails, makeup & wigs
-              </p>
-
-              {/* Service Icons */}
-              <div className="flex justify-center lg:justify-start gap-3 lg:gap-4 mb-10">
-                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-3.5 lg:p-4 text-3xl lg:text-4xl hover:scale-110 transition-transform cursor-default">
-                  💅
-                </div>
-                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-3.5 lg:p-4 text-3xl lg:text-4xl hover:scale-110 transition-transform cursor-default">
-                  💄
-                </div>
-                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-3.5 lg:p-4 text-3xl lg:text-4xl hover:scale-110 transition-transform cursor-default">
-                  💇‍♀️
-                </div>
-              </div>
-
-              {/* CTA Button */}
-              <Link href="/explore">
-                <Button
-                  size="lg"
-                  className="bg-white text-pink-600 hover:bg-pink-50 font-semibold px-8 py-6 text-base lg:text-lg rounded-full shadow-xl shadow-pink-900/20 gap-2 hover:gap-3 transition-all"
-                >
-                  <MapPin className="h-5 w-5" />
-                  Find Beauticians
-                  <ArrowRight className="h-5 w-5" />
-                </Button>
-              </Link>
-
-              {/* Stats - Desktop only */}
-              <div className="hidden lg:flex items-center gap-8 mt-12 pt-8 border-t border-white/20">
-                <div>
-                  <p className="text-3xl font-bold">500+</p>
-                  <p className="text-pink-200 text-sm">Beauticians</p>
-                </div>
-                <div>
-                  <p className="text-3xl font-bold">10k+</p>
-                  <p className="text-pink-200 text-sm">Happy Customers</p>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Star className="h-5 w-5 fill-amber-300 text-amber-300" />
-                  <p className="text-3xl font-bold">4.8</p>
-                  <p className="text-pink-200 text-sm ml-1">Rating</p>
-                </div>
-              </div>
-            </div>
-          </main>
-
-          {/* Footer */}
-          <footer
-            className={`px-6 lg:px-12 py-6 transition-all duration-700 delay-500 ${
-              isAnimated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+            <span className="text-lg font-bold text-zinc-900 tracking-tight">LukGood</span>
+          </div>
+          <Link
+            href="/explore"
+            className="text-sm text-pink-600 font-medium hover:text-pink-700 flex items-center gap-1"
           >
-            <Link
-              href="/register?role=beautician"
-              className="text-pink-100 hover:text-white text-sm inline-flex items-center gap-1 group"
-            >
-              Are you a beautician?{" "}
-              <span className="font-semibold underline underline-offset-2 group-hover:underline-offset-4 transition-all">
-                Join us
-              </span>
-              <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          </footer>
+            Browse Beauticians
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="container-app py-8 lg:py-12">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900 mb-3 tracking-tight">
+            Try Before You Visit
+          </h1>
+          <p className="text-zinc-500 md:text-lg max-w-md mx-auto">
+            See how you&apos;d look with new nails, makeup, or a wig using AI
+          </p>
+        </div>
+
+        {/* Try-On Feature */}
+        <TryOnSection />
+      </section>
+
+      {/* Divider */}
+      <div className="container-app">
+        <div className="border-t border-zinc-200" />
       </div>
 
-      {/* Right Side - Visual (Desktop Only) */}
-      <div className="hidden lg:flex flex-1 bg-zinc-50 items-center justify-center p-12 relative overflow-hidden">
-        {/* Decorative background */}
-        <div className="absolute inset-0 pattern-dots opacity-30" />
-
-        {/* Floating Cards */}
-        <div className="relative w-full max-w-md">
-          {/* Main Card */}
-          <div
-            className={`bg-white rounded-3xl shadow-2xl p-6 transform transition-all duration-1000 delay-300 ${
-              isAnimated ? "opacity-100 translate-y-0 rotate-0" : "opacity-0 translate-y-12 rotate-3"
-            }`}
+      {/* Popular Beauticians Section */}
+      <section className="container-app py-8 lg:py-12">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg md:text-xl font-semibold text-zinc-900">
+            Popular Near You
+          </h2>
+          <Link
+            href="/explore"
+            className="text-sm text-pink-600 font-medium hover:text-pink-700 flex items-center gap-1"
           >
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center text-2xl">
-                👩🏾‍🦱
-              </div>
-              <div>
-                <h3 className="font-semibold text-zinc-900">Akosua Beauty Lounge</h3>
-                <div className="flex items-center gap-1 text-sm text-zinc-500">
-                  <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                  <span>4.8</span>
-                  <span className="text-zinc-300">•</span>
-                  <span>Osu, Accra</span>
+            See all
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+          {popularBeauticians.map((beautician) => (
+            <Link
+              key={beautician.id}
+              href={`/beautician/${beautician.id}`}
+              className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+            >
+              {/* Cover Image */}
+              <div className="relative aspect-[4/3]">
+                {beautician.cover_photo ? (
+                  <Image
+                    src={beautician.cover_photo}
+                    alt={beautician.business_name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-pink-100 to-rose-100" />
+                )}
+                {/* Distance Badge */}
+                <div className="absolute top-2 right-2 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-medium text-zinc-700 flex items-center gap-1">
+                  <MapPin className="h-3 w-3" />
+                  2.1 km
                 </div>
               </div>
-            </div>
-            <div className="flex gap-2 mb-4">
-              <span className="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">Nails</span>
-              <span className="px-3 py-1 bg-rose-100 text-rose-700 text-xs font-medium rounded-full">Makeup</span>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              <div className="aspect-square rounded-xl bg-gradient-to-br from-pink-100 to-pink-50 flex items-center justify-center text-2xl">💅</div>
-              <div className="aspect-square rounded-xl bg-gradient-to-br from-rose-100 to-rose-50 flex items-center justify-center text-2xl">💄</div>
-              <div className="aspect-square rounded-xl bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center text-2xl">✨</div>
-            </div>
-          </div>
 
-          {/* Floating Badge */}
-          <div
-            className={`absolute -top-4 -right-4 bg-white rounded-2xl shadow-xl px-4 py-3 transition-all duration-1000 delay-500 ${
-              isAnimated ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                <MapPin className="h-4 w-4 text-green-600" />
-              </div>
-              <div>
-                <p className="text-xs text-zinc-500">Distance</p>
-                <p className="font-semibold text-zinc-900 text-sm">0.5 km away</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Floating Review */}
-          <div
-            className={`absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl px-4 py-3 transition-all duration-1000 delay-700 ${
-              isAnimated ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <div className="flex -space-x-2">
-                <div className="w-8 h-8 rounded-full bg-amber-200 border-2 border-white flex items-center justify-center text-sm">👩🏾</div>
-                <div className="w-8 h-8 rounded-full bg-pink-200 border-2 border-white flex items-center justify-center text-sm">👩🏽</div>
-                <div className="w-8 h-8 rounded-full bg-purple-200 border-2 border-white flex items-center justify-center text-sm">👩🏿</div>
-              </div>
-              <div>
-                <p className="font-semibold text-zinc-900 text-sm">200+ reviews</p>
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-3 w-3 fill-amber-400 text-amber-400" />
+              {/* Info */}
+              <div className="p-3">
+                <h3 className="font-medium text-zinc-900 text-sm truncate">
+                  {beautician.business_name}
+                </h3>
+                <div className="flex items-center gap-1 mt-1">
+                  <span className="text-amber-500">★</span>
+                  <span className="text-sm text-zinc-600">{beautician.rating || "4.5"}</span>
+                  <span className="text-zinc-300 text-sm">•</span>
+                  <span className="text-sm text-zinc-500 truncate">{beautician.address.split(",")[0]}</span>
+                </div>
+                {/* Service Tags */}
+                <div className="flex gap-1 mt-2">
+                  {beautician.services_offered.slice(0, 2).map((service) => (
+                    <span
+                      key={service}
+                      className="text-xs px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-600 capitalize"
+                    >
+                      {service === "wig" ? "Wigs" : service}
+                    </span>
                   ))}
                 </div>
               </div>
-            </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer CTA */}
+      <footer className="container-app py-6 border-t border-zinc-200">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-zinc-500">
+            Are you a beautician?{" "}
+            <Link href="/register?role=beautician" className="text-pink-600 font-medium hover:underline">
+              Join LukGood
+            </Link>
+          </p>
+          <div className="flex items-center gap-2 text-sm text-zinc-400">
+            <Sparkles className="h-4 w-4" />
+            <span>Powered by AI</span>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }
